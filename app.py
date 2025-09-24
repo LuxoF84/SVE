@@ -140,7 +140,7 @@ for idx, row in df_resumen.iterrows():
             ],
             'threshold': {
                 'line': {'color': "red", 'width': 4},
-                'thickness': 0.75,
+                'thickness': 0.10,
                 'value': capacidad_max * 0.9
             }
         }
@@ -432,6 +432,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
 
 
