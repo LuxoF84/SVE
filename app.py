@@ -23,7 +23,7 @@ def add_custom_logo():
         unsafe_allow_html=True,
     )
 add_custom_logo()
-st.title("My App")
+
 
 #####################
 
@@ -432,4 +432,5 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
