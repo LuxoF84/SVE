@@ -4,7 +4,28 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
 
+#####################
 
+def add_custom_logo():
+    st.markdown(
+        """
+        <style>
+        [data-testid="stHeader"] {
+            background-image: url("https://www.svti.cl/img/logo-svti.png");
+            background-repeat: no-repeat;
+            background-position: 98% 50%; /* Adjust for top-right placement */
+            background-size: 40px; /* Adjust logo size */
+            padding-top: 10px; /* Adjust as needed for spacing */
+            padding-right: 10px; /* Adjust for spacing */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+add_custom_logo()
+st.title("My App")
+
+#####################
 
 
 
@@ -411,3 +432,4 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
