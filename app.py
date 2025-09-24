@@ -412,7 +412,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
             y=matriz_volumen.index,
             labels={'x':'Rango de Antigüedad', 'y':'Producto', 'color':'Volumen'},
             title='Mapa de Calor de Antigüedad',
-            color_continuous_scale='balance',
+            color_continuous_scale='Picnic',
             text_auto=".0f",                  # <-- NUEVO: Muestra el valor en la celda
             width=600,                       # <-- NUEVO: Ancho para celdas más grandes
             height=600                       # <-- NUEVO: Altura para celdas más grandes
@@ -427,6 +427,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
 
 
