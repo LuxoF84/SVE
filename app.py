@@ -14,9 +14,9 @@ def add_custom_logo():
             background-image: url("https://www.svti.cl/img/logo-svti.png");
             background-repeat: no-repeat;
             background-position: 98% 50%; /* Adjust for top-right placement */
-            background-size: 40px; /* Adjust logo size */
+            background-size: 70px; /* Adjust logo size */
             padding-top: 10px; /* Adjust as needed for spacing */
-            padding-right: 10px; /* Adjust for spacing */
+            padding-left: 10px; /* Adjust for spacing */
         }
         </style>
         """,
@@ -432,5 +432,6 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
 
