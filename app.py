@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
 
-#####################
 
 def add_custom_logo():
     st.markdown(
@@ -23,10 +22,6 @@ def add_custom_logo():
         unsafe_allow_html=True,
     )
 add_custom_logo()
-
-
-#####################
-
 
 
 # --- Configuración de la página ---
@@ -48,9 +43,9 @@ pd.set_option('display.width', None)       # Ajusta el ancho de la consola para 
 
 # --- Carga y preparación de datos ---
 try:
-    df_resumen = pd.read_excel("estadias.xlsx")
+    df_resumen = pd.read_excel("C:\\Dell\\estadias.xlsx")
     
-    df_stock_completo = pd.read_excel("STOCK.xlsx")
+    df_stock_completo = pd.read_excel("C:\\Dell\\STOCK.xlsx")
 except FileNotFoundError:
     st.error("Error: No se encontraron los archivos 'estadias.xlsx' o 'STOCK.xlsx'. Por favor, verifica la ruta.")
     st.stop()
@@ -111,7 +106,7 @@ gauge_idx = 0
 for idx, row in df_resumen.iterrows():
     vol_stock = row['Vol. Stock']
     capacidad_max = row['Capacidad m3']
-    grupo_name = row[' ']
+    grupo_name = row['Grupo']
     
     # Excluir 'nan'
     if pd.isna(grupo_name):
@@ -121,7 +116,7 @@ for idx, row in df_resumen.iterrows():
         mode="gauge+number",
         value=vol_stock,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': f"Grupo {grupo_name}",
+        title={'text': f"{grupo_name}",
                'font': {'size': 20}},
         number={
             'valueformat': ".0f",
@@ -131,17 +126,22 @@ for idx, row in df_resumen.iterrows():
         gauge={
             'axis': {
                 'range': [0, capacidad_max],
-                'tickfont': {'size': 16}
+                'tickfont': {'size': 14}
             },
             'bar': {'color': "blue"},
             'steps': [
                 #{'range': [0, capacidad_max * 0.5], 'color': "white"},
                 {'range': [capacidad_max * 0.8, capacidad_max * 1], 'color': "red"}
-            ]
-        }
+            ],
+            #'threshold': {
+            #    'line': {'color': "red", 'width': 4},
+            #    'thickness': 0.75,
+            #    'value': capacidad_max * 0.9
+            }
+        
     ))
 
-    fig_gauge.update_layout(height=320, width=320)
+    fig_gauge.update_layout(height=300, width=300)
 
     # Muestra los valores 0 y Máximo debajo del gauge
     gauge_vals_cols = st.columns(2)
@@ -412,7 +412,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
             y=matriz_volumen.index,
             labels={'x':'Rango de Antigüedad', 'y':'Producto', 'color':'Volumen'},
             title='Mapa de Calor de Antigüedad',
-            color_continuous_scale='Picnic',
+            color_continuous_scale='Reds',
             text_auto=".0f",                  # <-- NUEVO: Muestra el valor en la celda
             width=600,                       # <-- NUEVO: Ancho para celdas más grandes
             height=600                       # <-- NUEVO: Altura para celdas más grandes
@@ -425,18 +425,4 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
         st.plotly_chart(fig3, use_container_width=True)
    
 else:
-
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
-
-
-
-
-
-
-
-
-
-
-
-
-
