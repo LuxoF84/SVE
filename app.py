@@ -141,7 +141,7 @@ for idx, row in df_resumen.iterrows():
         }
     ))
 
-    fig_gauge.update_layout(height=300, width=300)
+    fig_gauge.update_layout(height=320, width=320)
 
     # Muestra los valores 0 y Máximo debajo del gauge
     gauge_vals_cols = st.columns(2)
@@ -427,6 +427,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
 
 
