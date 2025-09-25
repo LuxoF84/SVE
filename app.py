@@ -43,9 +43,9 @@ pd.set_option('display.width', None)       # Ajusta el ancho de la consola para 
 
 # --- Carga y preparación de datos ---
 try:
-    df_resumen = pd.read_excel("C:\\Dell\\estadias.xlsx")
+    df_resumen = pd.read_excel("estadias.xlsx")
     
-    df_stock_completo = pd.read_excel("C:\\Dell\\STOCK.xlsx")
+    df_stock_completo = pd.read_excel("STOCK.xlsx")
 except FileNotFoundError:
     st.error("Error: No se encontraron los archivos 'estadias.xlsx' o 'STOCK.xlsx'. Por favor, verifica la ruta.")
     st.stop()
@@ -425,4 +425,5 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
         st.plotly_chart(fig3, use_container_width=True)
    
 else:
+
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
