@@ -111,7 +111,7 @@ gauge_idx = 0
 for idx, row in df_resumen.iterrows():
     vol_stock = row['Vol. Stock']
     capacidad_max = row['Capacidad m3']
-    grupo_name = row['Grupo']
+    grupo_name = row[' ']
     
     # Excluir 'nan'
     if pd.isna(grupo_name):
@@ -131,7 +131,7 @@ for idx, row in df_resumen.iterrows():
         gauge={
             'axis': {
                 'range': [0, capacidad_max],
-                'tickfont': {'size': 14}
+                'tickfont': {'size': 16}
             },
             'bar': {'color': "blue"},
             'steps': [
@@ -427,6 +427,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
 
 
