@@ -135,7 +135,7 @@ for idx, row in df_resumen.iterrows():
             },
             'bar': {'color': "blue"},
             'steps': [
-                {'range': [0, capacidad_max * 0.5], 'color': "white"},
+                #{'range': [0, capacidad_max * 0.5], 'color': "white"},
                 {'range': [capacidad_max * 0.8, capacidad_max * 1], 'color': "red"}
             ]
         }
@@ -427,6 +427,7 @@ if 'Fecha_Recepcion' in df_stock_completo.columns:
 else:
 
     st.warning("La columna 'Fecha_Recepcion' no se encontró en el archivo 'STOCK.xlsx'. Los gráficos de antigüedad no se mostrarán.")
+
 
 
 
