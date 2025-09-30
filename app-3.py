@@ -181,8 +181,8 @@ st.subheader("🔥 Heatmap Volumen vs Antigüedad")
 # Crear tabla dinámica (agrupación)
 heatmap_data = df_stock.pivot_table(
     values="Volumen",
-    index="Rango_Antiguedad",
-    columns="Grupo",     # 👈 aquí puedes cambiar a 'Cliente' o 'Bodega' si lo prefieres
+    index="Grupo",
+    columns="Rango_Antiguedad",     # 👈 aquí puedes cambiar a 'Cliente' o 'Bodega' si lo prefieres
     aggfunc="sum",
     fill_value=0
 )
