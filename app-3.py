@@ -148,6 +148,8 @@ if not df_last.empty:
     for i, (k, v) in enumerate(valores.items()):
         gauge = go.Figure(go.Indicator(
             mode="gauge+number",
+            title={'text': k, 'font': {'size': 12}}, 
+            number={'font': {'size': 18}}, 
             value=v,
             title={'text': k},
             gauge={'axis': {'range': [0, max(valores.values())*1.2]}}
