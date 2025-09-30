@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # -----------------------------
 # Cargar histórico
@@ -16,9 +17,9 @@ st.title("📊 Dashboard Histórico de Inventarios y Estadías")
 # -----------------------------
 st.sidebar.header("🔎 Filtros")
 
-# Filtro de grupos
-grupos = ["Todos"] + list(df_hist["Grupo"].unique())
-grupo_sel = st.sidebar.selectbox("Seleccionar Grupo", grupos)
+# Filtro múltiple de grupos
+grupos = list(df_hist["Grupo"].unique())
+grupos_sel = st.sidebar.multiselect("Seleccionar Grupos", grupos, default=grupos)
 
 # Filtro de fechas
 fecha_min = df_hist["Fecha"].min().date()
@@ -33,8 +34,8 @@ rango_fechas = st.sidebar.date_input(
 df_filtrado = df_hist.copy()
 
 # Aplicar filtros
-if grupo_sel != "Todos":
-    df_filtrado = df_filtrado[df_filtrado["Grupo"] == grupo_sel]
+if grupos_sel:
+    df_filtrado = df_filtrado[df_filtrado["Grupo"].isin(grupos_sel)]
 
 if len(rango_fechas) == 2:
     df_filtrado = df_filtrado[
@@ -117,7 +118,45 @@ if "Piedra" in df_hist["Grupo"].unique():
         st.info("⚠️ No hay datos de Piedra en el rango de fechas seleccionado.")
 
 # -----------------------------
-# 6. Tabla detallada
+# 6. Comparación global (último registro)
+# -----------------------------
+st.subheader("📊 Comparación de Métricas Globales")
+
+# Tomamos el último registro disponible del dataframe filtrado
+df_last = df_filtrado.sort_values("Fecha").tail(1)
+
+if not df_last.empty:
+    valores = {
+        "Capacidad m3": float(df_last["Capacidad m3"].values[0]),
+        "Vol. Consol. c/ Programa": float(df_last["Volumen Consolidable con Programa"].values[0]),
+        "Vol. Consol. s/ Programa": float(df_last["Volumen Consolidable Sin Programa"].values[0]),
+        "Vol. E. Incompletas s/ Programa": float(df_last["Volumen E. Incompletas Sin Programa"].values[0]),
+        "Stock Piedra": float(df_last[df_last["Grupo"] == "Piedra"]["Vol. Stock"].sum())
+    }
+
+    # Pie chart
+    fig_pie = px.pie(
+        names=list(valores.keys()),
+        values=list(valores.values()),
+        title="Distribución de métricas"
+    )
+    st.plotly_chart(fig_pie, use_container_width=True)
+
+    # Velocímetros
+    st.subheader("⏱️ Velocímetros de Métricas")
+    cols = st.columns(5)
+    for i, (k, v) in enumerate(valores.items()):
+        gauge = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=v,
+            title={'text': k},
+            gauge={'axis': {'range': [0, max(valores.values())*1.2]}}
+        ))
+        cols[i].plotly_chart(gauge, use_container_width=True)
+
+# -----------------------------
+# 7. Tabla detallada
 # -----------------------------
 st.subheader("📋 Datos Históricos")
 st.dataframe(df_filtrado)
+
