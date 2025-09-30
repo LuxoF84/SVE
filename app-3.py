@@ -189,7 +189,7 @@ heatmap_data = df_stock.pivot_table(
 )
 
 # Generar heatmap
-fig, ax = plt.subplots(figsize=(10,6))
+fig, ax = plt.subplots(figsize=(9,5))
 sns.heatmap(heatmap_data, annot=True, fmt=".0f", cmap="Reds", linewidths=0.5, ax=ax)
 
 plt.title("Relación Volumen vs Rango de Antigüedad", fontsize=14)
