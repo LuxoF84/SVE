@@ -151,7 +151,6 @@ if not df_last.empty:
             title={'text': k, 'font': {'size': 12}}, 
             number={'font': {'size': 18}}, 
             value=v,
-            title={'text': k},
             gauge={'axis': {'range': [0, max(valores.values())*1.2]}}
         ))
         cols[i].plotly_chart(gauge, use_container_width=True)
