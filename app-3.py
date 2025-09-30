@@ -159,5 +159,9 @@ if not df_last.empty:
 # 7. Tabla detallada
 # -----------------------------
 st.subheader("📋 Datos Históricos")
-st.dataframe(df_filtrado)
+df_tabla = df_filtrado.copy()
+if "Fecha" in df_tabla.columns:
+    df_tabla["Fecha"] = df_tabla["Fecha"].dt.strftime("%Y-%m-%d")  # solo día, mes, año
+
+st.dataframe(df_tabla)
 
