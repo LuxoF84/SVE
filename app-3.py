@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # -----------------------------
 # Cargar histórico
@@ -165,3 +167,29 @@ if "Fecha" in df_tabla.columns:
 
 st.dataframe(df_tabla)
 
+
+# Leer archivo STOCK.xlsx
+# -----------------------------
+stock_file = "STOCK.xlsx"   # asegúrate de tenerlo en la misma carpeta del script
+df_stock = pd.read_excel(stock_file)
+
+# -----------------------------
+# Heatmap Volumen vs Antigüedad
+# -----------------------------
+st.subheader("🔥 Heatmap Volumen vs Antigüedad")
+
+# Crear tabla dinámica (agrupación)
+heatmap_data = df_stock.pivot_table(
+    values="Volumen",
+    index="Rango_Antiguedad",
+    columns="Grupo",     # 👈 aquí puedes cambiar a 'Cliente' o 'Bodega' si lo prefieres
+    aggfunc="sum",
+    fill_value=0
+)
+
+# Generar heatmap
+fig, ax = plt.subplots(figsize=(10,6))
+sns.heatmap(heatmap_data, annot=True, fmt=".0f", cmap="Reds", linewidths=0.5, ax=ax)
+
+plt.title("Relación Volumen vs Rango de Antigüedad", fontsize=14)
+st.pyplot(fig)
