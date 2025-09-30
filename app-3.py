@@ -1,134 +1,85 @@
-import pandas as pd
 import streamlit as st
-import plotly.graph_objects as go
+import pandas as pd
 import plotly.express as px
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 # -----------------------------
-# Cargar datos desde GitHub
+# Cargar histórico
 # -----------------------------
-url = "https://raw.githubusercontent.com/LuxoF84/SVE/main/estadias.xlsx"
-df = pd.read_excel(url, parse_dates=["Fecha"])
+url = "https://raw.githubusercontent.com/LuxoF84/SVE/main/status%20maderas.xlsx"
+df_hist = pd.read_excel(url, sheet_name="Hoja1", parse_dates=["Fecha"])
 
-# -----------------------------
-# Configuración del dashboard
-# -----------------------------
-st.set_page_config(page_title="Dashboard Logístico", layout="wide")
-st.title("📊 Dashboard de Inventarios y Estadías")
+st.set_page_config(page_title="Dashboard Histórico", layout="wide")
+st.title("📊 Dashboard Histórico de Inventarios y Estadías")
 
 # -----------------------------
 # Filtros
 # -----------------------------
 st.sidebar.header("🔎 Filtros")
 
-fechas = sorted(df["Fecha"].unique())
-fecha_sel = st.sidebar.selectbox("Seleccionar Fecha", fechas, index=len(fechas)-1)
-
-grupos = ["Todos"] + list(df["Grupo"].unique())
+grupos = ["Todos"] + list(df_hist["Grupo"].unique())
 grupo_sel = st.sidebar.selectbox("Seleccionar Grupo", grupos)
 
-# Aplicar filtros
-df_filtrado = df[df["Fecha"] == fecha_sel]
+df_filtrado = df_hist.copy()
 if grupo_sel != "Todos":
     df_filtrado = df_filtrado[df_filtrado["Grupo"] == grupo_sel]
 
 # -----------------------------
-# KPIs globales
+# 1. Evolución % Utilización
 # -----------------------------
-st.subheader("🔑 Indicadores Clave")
-
-total_capacidad = df_filtrado["Capacidad m3"].sum()
-total_stock = df_filtrado["Vol. Stock"].sum()
-utilizacion = (total_stock / total_capacidad) * 100 if total_capacidad > 0 else 0
-holgura = df_filtrado["Holgura m3"].sum()
-
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Capacidad Total (m³)", f"{total_capacidad:,.0f}")
-col2.metric("Stock Actual (m³)", f"{total_stock:,.0f}")
-col3.metric("% Utilización", f"{utilizacion:.1f}%")
-col4.metric("Holgura Total (m³)", f"{holgura:,.0f}")
-
-# -----------------------------
-# Velocímetros por Grupo
-# -----------------------------
-st.subheader("⏱️ Utilización por Grupo (Velocímetros)")
-
-col1, col2, col3, col4 = st.columns(4)
-grupos = df_filtrado["Grupo"].unique()
-
-for i, grupo in enumerate(grupos):
-    df_g = df_filtrado[df_filtrado["Grupo"] == grupo]
-    if not df_g.empty:
-        valor = df_g["% Utilizacion"].values[0]
-        gauge = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=valor,
-            title={'text': f"{grupo}"},
-            gauge={
-                'axis': {'range': [0, 100]},
-                'bar': {'color': "green" if valor < 70 else "orange" if valor < 90 else "red"}
-            }
-        ))
-        if i == 0:
-            col1.plotly_chart(gauge, use_container_width=True)
-        elif i == 1:
-            col2.plotly_chart(gauge, use_container_width=True)
-        elif i == 2:
-            col3.plotly_chart(gauge, use_container_width=True)
-        elif i == 3:
-            col4.plotly_chart(gauge, use_container_width=True)
-
-# -----------------------------
-# Ocupación por Grupo (Barras)
-# -----------------------------
-st.subheader("📦 Ocupación por Grupo")
-
-fig_bar = px.bar(
+st.subheader("📈 Evolución % Utilización")
+fig_util = px.line(
     df_filtrado,
-    x="Grupo",
+    x="Fecha",
+    y="% Utilizacion",
+    color="Grupo",
+    markers=True,
+    title="Evolución de la Utilización (%)"
+)
+st.plotly_chart(fig_util, use_container_width=True)
+
+# -----------------------------
+# 2. Evolución Stock
+# -----------------------------
+st.subheader("📦 Evolución del Stock (m³)")
+fig_stock = px.line(
+    df_filtrado,
+    x="Fecha",
     y="Vol. Stock",
     color="Grupo",
-    text="Vol. Stock",
-    title="Volumen de Stock por Grupo"
+    markers=True,
+    title="Evolución del Volumen de Stock"
 )
-st.plotly_chart(fig_bar, use_container_width=True)
+st.plotly_chart(fig_stock, use_container_width=True)
 
 # -----------------------------
-# Distribución de Stock (Pie)
+# 3. Holgura
 # -----------------------------
-st.subheader("🥧 Distribución de % de Stock por Grupo")
-
-fig_pie = px.pie(
+st.subheader("📉 Evolución de Holgura (m³)")
+fig_holgura = px.line(
     df_filtrado,
-    names="Grupo",
-    values="Vol. Stock",
-    title="Participación de Stock por Grupo"
+    x="Fecha",
+    y="Holgura m3",
+    color="Grupo",
+    markers=True,
+    title="Evolución de la Holgura"
 )
-st.plotly_chart(fig_pie, use_container_width=True)
+st.plotly_chart(fig_holgura, use_container_width=True)
 
 # -----------------------------
-# Heatmap de Antigüedad
+# 4. Stock acumulado (stacked area)
 # -----------------------------
-st.subheader("🔥 Heatmap de Antigüedad de Cargas")
-
-max_fecha = df["Fecha"].max()
-df["Antiguedad_dias"] = (max_fecha - df["Fecha"]).dt.days
-
-pivot = df.pivot_table(
-    values="Vol. Stock",
-    index="Grupo",
-    columns="Antiguedad_dias",
-    aggfunc="sum",
-    fill_value=0
+st.subheader("🌊 Evolución Acumulada de Stock por Grupo")
+fig_area = px.area(
+    df_hist,
+    x="Fecha",
+    y="Vol. Stock",
+    color="Grupo",
+    title="Stock acumulado en el tiempo por grupo"
 )
-
-fig, ax = plt.subplots(figsize=(10, 5))
-sns.heatmap(pivot, cmap="YlOrRd", annot=False, cbar_kws={'label': 'Volumen Stock (m³)'}, ax=ax)
-st.pyplot(fig)
+st.plotly_chart(fig_area, use_container_width=True)
 
 # -----------------------------
-# Tabla detallada
+# 5. Tabla detallada
 # -----------------------------
-st.subheader("📋 Tabla Detallada de Datos")
+st.subheader("📋 Datos Históricos")
 st.dataframe(df_filtrado)
