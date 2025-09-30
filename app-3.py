@@ -172,6 +172,7 @@ st.dataframe(df_tabla)
 # -----------------------------
 stock_file = "STOCK.xlsx"   # asegúrate de tenerlo en la misma carpeta del script
 df_stock = pd.read_excel(stock_file)
+df_stock = df_stock[df_stock["Grupo"] != "CELULOSA"]
 
 # -----------------------------
 # Heatmap Volumen vs Antigüedad
