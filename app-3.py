@@ -133,7 +133,7 @@ if not df_last.empty:
         "Vol. Consol. c/ Programa": float(df_last["Volumen Consolidable Con Programa"].values[0]),
         "Vol. Consol. s/ Programa": float(df_last["Volumen Consolidable Sin Programa"].values[0]),
         "Vol. E. Incompletas s/ Programa": float(df_last["Volumen E. Incompletas Sin Programa"].values[0]),
-        "Stock Piedra": float(df_last[df_last["Grupo"] == "Piedra"]["Vol. Stock"].sum())
+        "Stock Piedra": float(df_last["Stock Piedra"].values[0])
     }
 
     # Pie chart
