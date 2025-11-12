@@ -968,7 +968,7 @@ st.markdown("Dashboard de análisis de capacidad, stock y consolidación por **f
 dfestadias = pl.read_excel(GITHUB_BASE + "status%20maderas.xlsx")
 
 
-
+import urllib.parse
 # Leer Excel con Polars
 GITHUB_BASE = "https://raw.githubusercontent.com/LuxoF84/SVE/main/"
 file_name = "status maderas.xlsx"
