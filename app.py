@@ -45,22 +45,21 @@ pd.set_option('display.width', None)       # Ajusta el ancho de la consola para 
 #st.markdown("---")
 
 # --- Carga y preparación de datos ---
-try:
 
+# URL base en formato RAW
 GITHUB_BASE = "https://raw.githubusercontent.com/LuxoF84/SVE/main/"
 
 try:
-    # Lee directamente desde el repositorio en GitHub
+    # Cargar ambos archivos desde GitHub
     df_resumen = pd.read_excel(GITHUB_BASE + "estadias.xlsx")
+    df_stock_completo = pd.read_excel(GITHUB_BASE + "STOCK.xlsx")
 
-except Exception as e:
-    st.error(f"No se pudo cargar el archivo desde GitHub: {e}")
+except FileNotFoundError:
+    st.error("Error: No se encontraron los archivos 'estadias.xlsx' o 'STOCK.xlsx'. Verifica la ruta en GitHub.")
     st.stop()
 
-
-    df_stock_completo = pd.read_excel(GITHUB_BASE + "STOCK.xlsx")
-except FileNotFoundError:
-    st.error("Error: No se encontraron los archivos 'estadias.xlsx' o 'STOCK.xlsx'. Por favor, verifica la ruta.")
+except Exception as e:
+    st.error(f"Ocurrió un error al cargar los archivos: {e}")
     st.stop()
 
 df_stock_completo = df_stock_completo[
