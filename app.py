@@ -965,7 +965,7 @@ st.markdown("Dashboard de análisis de capacidad, stock y consolidación por **f
 # ===========================================
 # CARGA DE DATOS DESDE LA MISMA CARPETA
 # ===========================================
-dfestadias = pl.read_excel(GITHUB_BASE + "status maderas.xlsx")
+dfestadias = pl.read_excel(GITHUB_BASE + "status%20maderas.xlsx")
 
 
 
