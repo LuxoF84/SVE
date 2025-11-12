@@ -298,36 +298,38 @@ if isinstance(df_resumen, pl.DataFrame):
 else:
     df_plot = df_resumen
 
-# Crear dos columnas
-col_pie, col_bar = st.columns(2)
+# Crear dos columnas lado a lado
+col1, col2 = st.columns([1, 1])  # proporciones iguales
 
-# === COLUMNA IZQUIERDA ===
-with col_pie:
+# === COLUMNA 1: PIE CHART ===
+with col1:
     st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo</h3>", unsafe_allow_html=True)
 
     fig_pie = px.pie(
         df_plot,
         names="Grupo",
         values="% Utilizacion",
+        color_discrete_sequence=px.colors.qualitative.Set2
     )
 
     fig_pie.update_layout(
         title_x=0.5,
-        height=400,
+        showlegend=True,
+        height=420,
         legend=dict(
             orientation="h",
             yanchor="top",
-            y=-0.2,
+            y=-0.25,
             xanchor="center",
             x=0.5
         ),
-        margin=dict(t=60, b=80)
+        margin=dict(t=60, b=60, l=20, r=20)
     )
 
     st.plotly_chart(fig_pie, use_container_width=True)
 
-# === COLUMNA DERECHA ===
-with col_bar:
+# === COLUMNA 2: BAR CHART ===
+with col2:
     st.markdown("<h3 style='text-align: center;'>Volumen por Tipo de Programa</h3>", unsafe_allow_html=True)
 
     df_bar = df_plot.melt(
@@ -348,7 +350,8 @@ with col_bar:
         y="Volumen",
         color="Tipo de Volumen",
         barmode="group",
-        height=400
+        color_discrete_sequence=px.colors.qualitative.Pastel1,
+        height=420
     )
 
     fig_bar.update_layout(
@@ -356,15 +359,16 @@ with col_bar:
         legend=dict(
             orientation="h",
             yanchor="top",
-            y=-0.2,
+            y=-0.25,
             xanchor="center",
             x=0.5
         ),
-        margin=dict(t=60, b=80)
+        margin=dict(t=60, b=60, l=20, r=20)
     )
 
     st.plotly_chart(fig_bar, use_container_width=True)
 
+# Separador visual
 st.markdown("---")
 
 # --- 5. Gráficos Adicionales (de la tabla de STOCK completa) ---
