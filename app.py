@@ -46,9 +46,13 @@ pd.set_option('display.width', None)       # Ajusta el ancho de la consola para 
 
 # --- Carga y preparación de datos ---
 try:
-    GITHUB_BASE = "https://github.com/LuxoF84/SVE/"
+GITHUB_BASE = "https://github.com/LuxoF84/SVE/blob/main/"
 
+try:
     df_resumen = pd.read_excel(GITHUB_BASE + "estadias.xlsx")
+except Exception as e:
+    st.error(f"No se pudo cargar el archivo desde GitHub: {e}")
+    st.stop()
     
     df_stock_completo = pd.read_excel(GITHUB_BASE + "STOCK.xlsx")
 except FileNotFoundError:
