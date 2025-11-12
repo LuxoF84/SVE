@@ -288,11 +288,18 @@ col_pie, col_bar = st.columns(2)
 with col_pie:
     #st.subheader("% de Utilización por Grupo")
     st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo'</h1>", unsafe_allow_html=True)
+    # Si df_resumen es de Polars, conviértelo; si ya es pandas, déjalo igual
+if isinstance(df_resumen, pl.DataFrame):
+    df_plot = df_resumen.to_pandas()
+else:
+    df_plot = df_resumen
+
+# Luego grafica con Plotly
     fig_pie = px.pie(
-        df_resumen.to_pandas(),
-        values='% Utilizacion',
-        names='Grupo',
-        #title='Porcentaje de Utilización por Grupo'
+        df_plot,
+        names="Grupo",
+        values="% Utilizacion",
+        title="Porcentaje de Utilización por Grupo"
     )
     
     fig_pie.update_layout(
