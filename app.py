@@ -285,8 +285,33 @@ st.markdown("---")
 # --- 4. Gráficos en el centro (Pie y Bar) ---
 #################################################################################
 
-# Crear columnas lado a lado (mitad y mitad)
-col_pie, col_bar = st.columns([1, 1])
+# --- CSS para diseño responsivo ---
+st.markdown("""
+<style>
+/* Contenedor general */
+div[data-testid="stHorizontalBlock"] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Cada columna ocupa el 48% del ancho en pantallas grandes */
+div[data-testid="stVerticalBlock"] {
+    flex: 1 1 48%;
+    margin-bottom: 20px;
+}
+
+/* En pantallas pequeñas, las columnas ocupan todo el ancho */
+@media (max-width: 900px) {
+    div[data-testid="stVerticalBlock"] {
+        flex: 1 1 100%;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Crear columnas lado a lado
+col_pie, col_bar = st.columns(2)
 
 # === COLUMNA IZQUIERDA ===
 with col_pie:
@@ -355,7 +380,6 @@ with col_bar:
 
     st.plotly_chart(fig_bar, use_container_width=True)
 
-# Separador visual
 st.markdown("---")
 
 
