@@ -289,7 +289,7 @@ with col_pie:
     #st.subheader("% de Utilización por Grupo")
     st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo'</h1>", unsafe_allow_html=True)
     fig_pie = px.pie(
-        df_resumen,
+        df_resumen.to_pandas(),
         values='% Utilizacion',
         names='Grupo',
         #title='Porcentaje de Utilización por Grupo'
