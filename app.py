@@ -46,9 +46,11 @@ pd.set_option('display.width', None)       # Ajusta el ancho de la consola para 
 
 # --- Carga y preparación de datos ---
 try:
-    df_resumen = pd.read_excel("estadias.xlsx")
+    GITHUB_BASE = "https://github.com/LuxoF84/SVE/"
+
+    df_resumen = pd.read_excel(GITHUB_BASE + "estadias.xlsx")
     
-    df_stock_completo = pd.read_excel("STOCK.xlsx")
+    df_stock_completo = pd.read_excel(GITHUB_BASE + "STOCK.xlsx")
 except FileNotFoundError:
     st.error("Error: No se encontraron los archivos 'estadias.xlsx' o 'STOCK.xlsx'. Por favor, verifica la ruta.")
     st.stop()
@@ -473,7 +475,7 @@ def load_data():
     with st.spinner(f"⏳ Cargando datos desde merged.xlsx..."):
        
         try:
-            df = pl.read_excel("merged.xlsx")
+            df = pl.read_excel(GITHUB_BASE + "merged.xlsx")
         except Exception:
             df = pl.from_pandas(pd.read_excel("merged.xlsx", engine="openpyxl"))
             
@@ -943,11 +945,9 @@ st.markdown("Dashboard de análisis de capacidad, stock y consolidación por **f
 # ===========================================
 # CARGA DE DATOS DESDE LA MISMA CARPETA
 # ===========================================
-file_name = r"status maderas.xlsx"
+dfestadias = pl.read_excel(GITHUB_BASE + "status maderas.xlsx")
 
-if not os.path.exists(file_name):
-    st.error(f"No se encontró el archivo **{file_name}** en la misma carpeta del script.")
-    st.stop()
+
 
 # Leer Excel con Polars
 dfestadias = pl.read_excel(file_name)
