@@ -285,68 +285,6 @@ st.markdown("---")
 # --- 4. Gráficos en el centro (Pie y Bar) ---
 #################################################################################
 
-# --- 1. Gráficos de Utilización y Volumen ---
-st.markdown("<h2 style='text-align: center;'>Resumen General de Utilización y Volumen</h2>", unsafe_allow_html=True)
-
-col_pie, col_bar = st.columns(2)
-
-with col_pie:
-    st.markdown("<h4 style='text-align: center;'>% de Utilización por Grupo</h4>", unsafe_allow_html=True)
-    fig_pie = px.pie(
-        df_resumen,
-        values="% Utilizacion",
-        names="Grupo",
-        color_discrete_sequence=px.colors.qualitative.Set2,
-        title="Porcentaje de Utilización por Grupo"
-    )
-    fig_pie.update_layout(
-        legend=dict(
-            orientation="h",
-            yanchor="top",
-            y=-0.15,
-            xanchor="center",
-            x=0.5
-        ),
-        title_x=0.5
-    )
-    st.plotly_chart(fig_pie, use_container_width=True)
-
-with col_bar:
-    st.markdown("<h4 style='text-align: center;'>Volumen por Tipo de Programa</h4>", unsafe_allow_html=True)
-    df_bar = df_resumen.melt(
-        id_vars="Grupo",
-        value_vars=[
-            "Volumen Consolidable Con Programa",
-            "Volumen Consolidable Sin Programa",
-            "Volumen E. Incompletas Sin Programa",
-            "Stock Piedra"
-        ],
-        var_name="Tipo de Volumen",
-        value_name="Volumen"
-    )
-
-    fig_bar = px.bar(
-        df_bar,
-        x="Grupo",
-        y="Volumen",
-        color="Tipo de Volumen",
-        barmode="group",
-        color_discrete_sequence=px.colors.qualitative.Pastel1,
-        title="Volumen por Tipo de Programa",
-    )
-    fig_bar.update_layout(
-        legend=dict(
-            orientation="h",
-            yanchor="top",
-            y=-0.15,
-            xanchor="center",
-            x=0.5
-        ),
-        title_x=0.5
-    )
-    st.plotly_chart(fig_bar, use_container_width=True)
-
-st.markdown("---")
 
 
 
