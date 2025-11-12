@@ -285,23 +285,33 @@ st.markdown("---")
 # --- 4. Gráficos en el centro (Pie y Bar) ---
 #################################################################################
 
-# --- CSS para diseño responsivo ---
 st.markdown("""
 <style>
-/* Contenedor general */
+/* Estructura general */
 div[data-testid="stHorizontalBlock"] {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-/* Cada columna ocupa el 48% del ancho en pantallas grandes */
+/* Columnas lado a lado */
 div[data-testid="stVerticalBlock"] {
     flex: 1 1 48%;
     margin-bottom: 20px;
 }
 
-/* En pantallas pequeñas, las columnas ocupan todo el ancho */
+/* Centrado de títulos y gráficos */
+h3 {
+    text-align: center;
+}
+
+/* Forzar gráficos a alinearse a la izquierda */
+div[data-testid="stPlotlyChart"] {
+    margin: 0 auto 0 0 !important; /* elimina centrado automático */
+    display: block;
+}
+
+/* En pantallas pequeñas: apilar */
 @media (max-width: 900px) {
     div[data-testid="stVerticalBlock"] {
         flex: 1 1 100%;
@@ -310,12 +320,12 @@ div[data-testid="stVerticalBlock"] {
 </style>
 """, unsafe_allow_html=True)
 
-# Crear columnas lado a lado
+# Crear columnas
 col_pie, col_bar = st.columns(2)
 
 # === COLUMNA IZQUIERDA ===
 with col_pie:
-    st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo</h3>", unsafe_allow_html=True)
+    st.markdown("<h3>% de Utilización por Grupo</h3>", unsafe_allow_html=True)
 
     fig_pie = px.pie(
         df_resumen,
@@ -327,22 +337,23 @@ with col_pie:
     fig_pie.update_layout(
         height=420,
         title_x=0.5,
-        showlegend=True,
+        margin=dict(t=40, b=60, l=10, r=10),
         legend=dict(
             orientation="h",
             yanchor="top",
             y=-0.25,
             xanchor="center",
             x=0.5
-        ),
-        margin=dict(t=60, b=60, l=20, r=20)
+        )
     )
 
-    st.plotly_chart(fig_pie, use_container_width=True)
+    # 👇 No usar "use_container_width=True" aquí
+    # lo mantenemos ajustado a su propio tamaño
+    st.plotly_chart(fig_pie, use_container_width=False)
 
 # === COLUMNA DERECHA ===
 with col_bar:
-    st.markdown("<h3 style='text-align: center;'>Volumen por Tipo de Programa</h3>", unsafe_allow_html=True)
+    st.markdown("<h3>Volumen por Tipo de Programa</h3>", unsafe_allow_html=True)
 
     df_bar = df_resumen.melt(
         id_vars="Grupo",
@@ -368,14 +379,14 @@ with col_bar:
 
     fig_bar.update_layout(
         title_x=0.5,
+        margin=dict(t=40, b=60, l=10, r=10),
         legend=dict(
             orientation="h",
             yanchor="top",
             y=-0.25,
             xanchor="center",
             x=0.5
-        ),
-        margin=dict(t=60, b=60, l=20, r=20)
+        )
     )
 
     st.plotly_chart(fig_bar, use_container_width=True)
