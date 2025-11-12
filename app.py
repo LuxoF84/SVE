@@ -471,11 +471,11 @@ def load_data():
     st.session_state.loading_data = True
     
     with st.spinner(f"⏳ Cargando datos desde merged.xlsx..."):
-        file_path = r"merged.xlsx"
+       
         try:
-            df = pl.read_excel(file_path)
+            df = pl.read_excel("merged.xlsx")
         except Exception:
-            df = pl.from_pandas(pd.read_excel(file_path, engine="openpyxl"))
+            df = pl.from_pandas(pd.read_excel("merged.xlsx", engine="openpyxl"))
             
     # -------------------------------------------------------------------------
     # INICIO: Manejo de Conflicto de Columna Duplicada ('CT') - Eliminación
