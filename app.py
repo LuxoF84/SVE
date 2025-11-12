@@ -46,9 +46,9 @@ pd.set_option('display.width', None)       # Ajusta el ancho de la consola para 
 
 # --- Carga y preparación de datos ---
 try:
-    df_resumen = pd.read_excel("C:\\Dell\\estadias.xlsx")
+    df_resumen = pd.read_excel("estadias.xlsx")
     
-    df_stock_completo = pd.read_excel("C:\\Dell\\STOCK.xlsx")
+    df_stock_completo = pd.read_excel("STOCK.xlsx")
 except FileNotFoundError:
     st.error("Error: No se encontraron los archivos 'estadias.xlsx' o 'STOCK.xlsx'. Por favor, verifica la ruta.")
     st.stop()
@@ -471,7 +471,7 @@ def load_data():
     st.session_state.loading_data = True
     
     with st.spinner(f"⏳ Cargando datos desde merged.xlsx..."):
-        file_path = r"C:\Dell\merged.xlsx"
+        file_path = r"merged.xlsx"
         try:
             df = pl.read_excel(file_path)
         except Exception:
@@ -943,7 +943,7 @@ st.markdown("Dashboard de análisis de capacidad, stock y consolidación por **f
 # ===========================================
 # CARGA DE DATOS DESDE LA MISMA CARPETA
 # ===========================================
-file_name = r"C:\\DYM\\status\status maderas.xlsx"
+file_name = r"status maderas.xlsx"
 
 if not os.path.exists(file_name):
     st.error(f"No se encontró el archivo **{file_name}** en la misma carpeta del script.")
