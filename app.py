@@ -492,12 +492,12 @@ def load_data():
     
     with st.spinner(f"⏳ Cargando datos desde merged.xlsx..."):
        
-    try:
-        df = pl.from_pandas(pd.read_excel(GITHUB_BASE + "merged.xlsx", engine="openpyxl"))
-        return df
-    except Exception as e:
-        st.error(f"No se pudo cargar el archivo merged.xlsx desde GitHub: {e}")
-        st.stop()
+        try:
+            df = pl.from_pandas(pd.read_excel(GITHUB_BASE + "merged.xlsx", engine="openpyxl"))
+            return df
+        except Exception as e:
+            st.error(f"No se pudo cargar el archivo merged.xlsx desde GitHub: {e}")
+            st.stop()
             
     # -------------------------------------------------------------------------
     # INICIO: Manejo de Conflicto de Columna Duplicada ('CT') - Eliminación
