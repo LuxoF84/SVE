@@ -298,49 +298,64 @@ if isinstance(df_resumen, pl.DataFrame):
 else:
     df_plot = df_resumen
 
-# Luego grafica con Plotly
+# Crear dos columnas de igual ancho
+col_pie, col_bar = st.columns(2)
+
+# === Columna izquierda: Gráfico de pastel ===
+with col_pie:
+    st.markdown("<h3 style='text-align: center;'>Porcentaje de Utilización por Grupo</h3>", unsafe_allow_html=True)
+
     fig_pie = px.pie(
         df_plot,
         names="Grupo",
         values="% Utilizacion",
-        title="Porcentaje de Utilización por Grupo"
     )
-    
-    fig_pie.update_layout(
-            legend=dict(
-            orientation="h",  # Horizontal
-            yanchor="top",    # Ancla superior de la leyenda
-            y=-0.1,          # Posición vertical (negativa para colocar debajo)
-            xanchor="center", # Centrar horizontalmente
-            x=0.5            # Posición horizontal centrada
-        ))
 
+    fig_pie.update_layout(
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.1,
+            xanchor="center",
+            x=0.5
+        )
+    )
 
     st.plotly_chart(fig_pie, use_container_width=True)
 
+# === Columna derecha: Barras ===
 with col_bar:
-    #st.subheader("Volumen por Tipo de Programa")
-    st.markdown("<h3 style='text-align: center;'>Volumen por Tipo de Programa</h1>", unsafe_allow_html=True)
-    
-    df_bar = df_resumen.melt(id_vars='Grupo', value_vars=['Volumen Consolidable Con Programa', 'Volumen Consolidable Sin Programa', 'Volumen E. Incompletas Sin Programa', 'Stock Piedra'],
-                             var_name='Tipo de Volumen', value_name='Volumen')
-    
+    st.markdown("<h3 style='text-align: center;'>Volumen por Tipo de Programa</h3>", unsafe_allow_html=True)
+
+    df_bar = df_resumen.melt(
+        id_vars='Grupo',
+        value_vars=[
+            'Volumen Consolidable Con Programa',
+            'Volumen Consolidable Sin Programa',
+            'Volumen E. Incompletas Sin Programa',
+            'Stock Piedra'
+        ],
+        var_name='Tipo de Volumen',
+        value_name='Volumen'
+    )
+
     fig_bar = px.bar(
         df_bar,
         x='Grupo',
         y='Volumen',
         color='Tipo de Volumen',
         barmode='group',
-        #title='Volumen por Grupo y Tipo'
     )
+
     fig_bar.update_layout(
-            legend=dict(
-            orientation="h",  # Horizontal
-            yanchor="top",    # Ancla superior de la leyenda
-            y=-0.1,          # Posición vertical (negativa para colocar debajo)
-            xanchor="center", # Centrar horizontalmente
-            x=0.5            # Posición horizontal centrada
-        ))
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.1,
+            xanchor="center",
+            x=0.5
+        )
+    )
 
     st.plotly_chart(fig_bar, use_container_width=True)
 
