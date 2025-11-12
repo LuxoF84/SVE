@@ -970,7 +970,16 @@ dfestadias = pl.read_excel(GITHUB_BASE + "status%20maderas.xlsx")
 
 
 # Leer Excel con Polars
-dfestadias = pl.read_excel(file_name)
+GITHUB_BASE = "https://raw.githubusercontent.com/LuxoF84/SVE/main/"
+file_name = "status maderas.xlsx"
+
+try:
+    encoded_name = urllib.parse.quote(file_name)
+    url = GITHUB_BASE + encoded_name
+    dfestadias = pl.from_pandas(pd.read_excel(url, engine="openpyxl"))
+except Exception as e:
+    st.error(f"No se pudo cargar el archivo '{file_name}' desde GitHub: {e}")
+    st.stop()
 
 # Limpieza de nombres de columnas
 dfestadias = dfestadias.rename({c: c.strip() for c in dfestadias.columns})
