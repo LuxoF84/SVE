@@ -288,7 +288,11 @@ col_pie, col_bar = st.columns(2)
 with col_pie:
     #st.subheader("% de Utilización por Grupo")
     st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo'</h1>", unsafe_allow_html=True)
+
     # Si df_resumen es de Polars, conviértelo; si ya es pandas, déjalo igual
+
+import polars as pl
+
 if isinstance(df_resumen, pl.DataFrame):
     df_plot = df_resumen.to_pandas()
 else:
