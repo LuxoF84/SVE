@@ -284,56 +284,78 @@ st.markdown("---")
 
 # --- 4. Gráficos en el centro (Pie y Bar) ---
 #################################################################################
-col_pie, col_bar = st.columns(2)
 
+# Crear columnas lado a lado (mitad y mitad)
+col_pie, col_bar = st.columns([1, 1])
+
+# === COLUMNA IZQUIERDA ===
 with col_pie:
-    #st.subheader("% de Utilización por Grupo")
-    st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo'</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>% de Utilización por Grupo</h3>", unsafe_allow_html=True)
+
     fig_pie = px.pie(
         df_resumen,
-        values='% Utilizacion',
-        names='Grupo',
-        #title='Porcentaje de Utilización por Grupo'
+        values="% Utilizacion",
+        names="Grupo",
+        color_discrete_sequence=px.colors.qualitative.Set2
     )
-    
-    fig_pie.update_layout(
-            legend=dict(
-            orientation="h",  # Horizontal
-            yanchor="top",    # Ancla superior de la leyenda
-            y=-0.1,          # Posición vertical (negativa para colocar debajo)
-            xanchor="center", # Centrar horizontalmente
-            x=0.5            # Posición horizontal centrada
-        ))
 
+    fig_pie.update_layout(
+        height=420,
+        title_x=0.5,
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.25,
+            xanchor="center",
+            x=0.5
+        ),
+        margin=dict(t=60, b=60, l=20, r=20)
+    )
 
     st.plotly_chart(fig_pie, use_container_width=True)
 
+# === COLUMNA DERECHA ===
 with col_bar:
-    #st.subheader("Volumen por Tipo de Programa")
-    st.markdown("<h3 style='text-align: center;'>Volumen por Tipo de Programa</h1>", unsafe_allow_html=True)
-    
-    df_bar = df_resumen.melt(id_vars='Grupo', value_vars=['Volumen Consolidable Con Programa', 'Volumen Consolidable Sin Programa', 'Volumen E. Incompletas Sin Programa', 'Stock Piedra'],
-                             var_name='Tipo de Volumen', value_name='Volumen')
-    
+    st.markdown("<h3 style='text-align: center;'>Volumen por Tipo de Programa</h3>", unsafe_allow_html=True)
+
+    df_bar = df_resumen.melt(
+        id_vars="Grupo",
+        value_vars=[
+            "Volumen Consolidable Con Programa",
+            "Volumen Consolidable Sin Programa",
+            "Volumen E. Incompletas Sin Programa",
+            "Stock Piedra"
+        ],
+        var_name="Tipo de Volumen",
+        value_name="Volumen"
+    )
+
     fig_bar = px.bar(
         df_bar,
-        x='Grupo',
-        y='Volumen',
-        color='Tipo de Volumen',
-        barmode='group',
-        #title='Volumen por Grupo y Tipo'
+        x="Grupo",
+        y="Volumen",
+        color="Tipo de Volumen",
+        barmode="group",
+        color_discrete_sequence=px.colors.qualitative.Pastel1,
+        height=420
     )
+
     fig_bar.update_layout(
-            legend=dict(
-            orientation="h",  # Horizontal
-            yanchor="top",    # Ancla superior de la leyenda
-            y=-0.1,          # Posición vertical (negativa para colocar debajo)
-            xanchor="center", # Centrar horizontalmente
-            x=0.5            # Posición horizontal centrada
-        ))
+        title_x=0.5,
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.25,
+            xanchor="center",
+            x=0.5
+        ),
+        margin=dict(t=60, b=60, l=20, r=20)
+    )
 
     st.plotly_chart(fig_bar, use_container_width=True)
 
+# Separador visual
 st.markdown("---")
 
 
