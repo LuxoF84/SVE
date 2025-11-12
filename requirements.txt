@@ -8,3 +8,4 @@ polars
 plotly
 os
 datetime
+plotly.express
